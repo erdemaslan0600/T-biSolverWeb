@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Arduino Math Tool</title>
+
+<style>
+body{
+font-family: Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+
+button{
+padding:12px 20px;
+margin:6px;
+font-size:18px;
+cursor:pointer;
+}
+
+input{
+padding:10px;
+font-size:18px;
+margin:5px;
+}
+
+#menu{
+margin-top:30px;
+}
+
+.result{
+margin-top:20px;
+font-size:22px;
+color:#00ffcc;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Arduino Math Tool</h1>
+
+<div id="menu">
+
+<h2>Ana Menü</h2>
+
+<button onclick="bolunmeMenu()">Bolunebilme</button>
+<button onclick="asalMenu()">Asal Sayi</button>
+<button onclick="ebobMenu()">EBOB / EKOK</button>
+<button onclick="calcMenu()">Hesap Makinesi</button>
+
+</div>
+
+<div id="app"></div>
+
+<script>
+
+function bolunmeMenu(){
+document.getElementById("app").innerHTML=`
+
+<h2>Bolunebilme</h2>
+
+<input id="s1" placeholder="Sayi">
+<input id="s2" placeholder="Bolen">
+
+<br>
+
+<button onclick="bolunme()">Hesapla</button>
+<button onclick="anaMenu()">Geri</button>
+
+<div class="result" id="sonuc"></div>
+`;
+}
+
+function bolunme(){
+
+let a=parseInt(document.getElementById("s1").value);
+let b=parseInt(document.getElementById("s2").value);
+
+if(b==0){
+sonuc.innerHTML="Sifira Bolunmez";
+return;
+}
+
+let kat=Math.floor(a/b)*b;
+
+if(kat==a) kat-=b;
+
+let fark=a-kat;
+
+let bolunur=(fark%b==0 && fark!=0);
+
+sonuc.innerHTML=
+`
+En Yakin Kat: ${kat} <br>
+Fark: ${fark} <br>
+Sonuc: ${bolunur ? "Bolunur" : "Bolunmez"}
+`;
+
+}
+
+function asalMenu(){
+
+document.getElementById("app").innerHTML=`
+
+<h2>Asal Sayi</h2>
+
+<input id="sayi" placeholder="Sayi">
+
+<br>
+
+<button onclick="asal()">Kontrol</button>
+<button onclick="anaMenu()">Geri</button>
+
+<div class="result" id="sonuc"></div>
+`;
+
+}
+
+function asal(){
+
+let n=parseInt(document.getElementById("sayi").value);
+
+if(n<=1){
+sonuc.innerHTML="Asal Degil";
+return;
+}
+
+for(let i=2;i<=Math.sqrt(n);i++){
+if(n%i==0){
+sonuc.innerHTML="Asal Degil";
+return;
+}
+}
+
+sonuc.innerHTML="Asal";
+
+}
+
+function ebobMenu(){
+
+document.getElementById("app").innerHTML=`
+
+<h2>EBOB / EKOK</h2>
+
+<input id="s1" placeholder="Sayi 1">
+<input id="s2" placeholder="Sayi 2">
+
+<br>
+
+<button onclick="ebob()">EBOB</button>
+<button onclick="ekok()">EKOK</button>
+<button onclick="anaMenu()">Geri</button>
+
+<div class="result" id="sonuc"></div>
+
+`;
+
+}
+
+function ebob(){
+
+let a=parseInt(s1.value);
+let b=parseInt(s2.value);
+
+while(b!=0){
+let t=b;
+b=a%b;
+a=t;
+}
+
+sonuc.innerHTML="EBOB = "+a;
+
+}
+
+function ekok(){
+
+let a=parseInt(s1.value);
+let b=parseInt(s2.value);
+
+let eb=a;
+let bb=b;
+
+while(bb!=0){
+let t=bb;
+bb=eb%bb;
+eb=t;
+}
+
+let ek=(a*b)/eb;
+
+sonuc.innerHTML="EKOK = "+ek;
+
+}
+
+function calcMenu(){
+
+document.getElementById("app").innerHTML=`
+
+<h2>Hesap Makinesi</h2>
+
+<input id="s1" placeholder="Sayi 1">
+<input id="s2" placeholder="Sayi 2">
+
+<br>
+
+<button onclick="calc('+')">+</button>
+<button onclick="calc('-')">-</button>
+<button onclick="calc('*')">*</button>
+<button onclick="calc('/')">/</button>
+
+<br><br>
+
+<button onclick="anaMenu()">Geri</button>
+
+<div class="result" id="sonuc"></div>
+
+`;
+
+}
+
+function calc(op){
+
+let a=parseFloat(s1.value);
+let b=parseFloat(s2.value);
+
+let r;
+
+if(op=="+") r=a+b;
+if(op=="-") r=a-b;
+if(op=="*") r=a*b;
+
+if(op=="/"){
+if(b==0){
+sonuc.innerHTML="Sifira Bolunmez";
+return;
+}
+r=a/b;
+}
+
+sonuc.innerHTML="Sonuc = "+r;
+
+}
+
+function anaMenu(){
+
+document.getElementById("app").innerHTML="";
+}
+
+</script>
+
+</body>
+</html>
